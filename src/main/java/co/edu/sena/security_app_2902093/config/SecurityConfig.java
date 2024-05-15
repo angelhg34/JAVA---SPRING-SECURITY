@@ -1,6 +1,7 @@
 package co.edu.sena.security_app_2902093.config;
 
 
+import co.edu.sena.security_app_2902093.service.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,9 +53,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider(UserDetailServiceImpl userDetailService){
         DaoAuthenticationProvider provider= new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(null);
-        provider.setUserDetailsService(null);
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(userDetailService);
         return provider;
-    }}
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+
+
+}
